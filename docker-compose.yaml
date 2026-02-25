@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: billing-contest-api
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      DATABASE_URL: "${DATABASE_URL:-sqlite:////app/data/billing.db}"
+      BANK_API_BASE_URL: "${BANK_API_BASE_URL:-https://bank.api}"
+      BANK_API_TIMEOUT_SECONDS: "${BANK_API_TIMEOUT_SECONDS:-5.0}"
+    volumes:
+      - billing_data:/app/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/orders', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  billing_data:
