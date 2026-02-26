@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.bank_client import BankPaymentSnapshot
+from app.bank.client import BankPaymentSnapshot
 from app.database import Base
 from app.enums import BankStatus, OrderPaymentStatus
 from app.models import Order
