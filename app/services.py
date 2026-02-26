@@ -7,7 +7,7 @@ from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from app.bank_client import BankApiClient
+from app.bank.client import BankAPIClient
 from app.enums import BankStatus, OrderPaymentStatus, PaymentStatus, PaymentType
 from app.exceptions import ConflictError, NotFoundError, ValidationError
 from app.models import BankPaymentState, Order, Payment
@@ -24,7 +24,7 @@ class OrderPaymentResult:
 
 
 class PaymentService:
-    def __init__(self, session: Session, bank_client: BankApiClient):
+    def __init__(self, session: Session, bank_client: BankAPIClient):
         self.session = session
         self.bank_client = bank_client
 

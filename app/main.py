@@ -6,7 +6,7 @@ from fastapi import Depends, FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from app.bank_client import BankApiClient
+from app.bank.client import BankAPIClient
 from app.bootstrap import init_db
 from app.config import settings
 from app.database import get_session
@@ -42,8 +42,8 @@ async def app_error_handler(_, exc: AppError) -> JSONResponse:
     )
 
 
-def get_bank_client() -> Generator[BankApiClient, None, None]:
-    client = BankApiClient(
+def get_bank_client() -> Generator[BankAPIClient, None, None]:
+    client = BankAPIClient(
         base_url=settings.bank_api_base_url,
         timeout_seconds=settings.bank_api_timeout_seconds,
     )
@@ -55,7 +55,7 @@ def get_bank_client() -> Generator[BankApiClient, None, None]:
 
 def get_payment_service(
     session: Session = Depends(get_session),
-    bank_client: BankApiClient = Depends(get_bank_client),
+    bank_client: BankAPIClient = Depends(get_bank_client),
 ) -> PaymentService:
     return PaymentService(session=session, bank_client=bank_client)
 
